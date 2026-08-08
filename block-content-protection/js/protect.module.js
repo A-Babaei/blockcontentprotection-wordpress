@@ -12,6 +12,14 @@ if (settingsElement) {
     console.error("BCP Error: Settings data element not found.");
 }
 
+// Which content types are protected on this page. Defaults to "all" so the
+// module still behaves sensibly if the bridge data is ever missing a key.
+const ct = Object.assign(
+    { images: true, text: true, videos: true, code: true, banners: true },
+    bcp_settings.content_types || {}
+);
+
+const CODE_SELECTOR = 'pre, code, .wp-block-code, .wp-block-syntaxhighlighter-code, .hljs, .EnlighterJSRAW';
 
 const processedVideos = new WeakSet();
 
@@ -126,6 +134,38 @@ const createFullscreenWatermark = (videoElement) => {
     }
 };
 
+// --- Code Block Protection ---
+const protectCodeBlock = (el) => {
+    if (el.dataset.bcpCodeProtected === 'true') return;
+    el.dataset.bcpCodeProtected = 'true';
+    el.classList.add('bcp-protect-noselect');
+    el.addEventListener('copy', preventDefault);
+    el.addEventListener('contextmenu', preventDefault);
+    el.addEventListener('dragstart', preventDefault);
+};
+
+// --- Banner / Logo Protection ---
+const protectBanner = (el) => {
+    if (el.dataset.bcpBannerProtected === 'true') return;
+    el.dataset.bcpBannerProtected = 'true';
+    el.classList.add('bcp-protect-noselect', 'bcp-protect-nodrag');
+    el.addEventListener('dragstart', preventDefault);
+    el.addEventListener('contextmenu', preventDefault);
+};
+
+// Applies `protectFn` to `root` itself (if it matches `selector`) and to any
+// matching descendants. Used both for the initial page scan and for nodes
+// added later via the MutationObserver.
+const scanAndProtect = (root, selector, protectFn) => {
+    if (!selector || root.nodeType !== 1) return;
+    try {
+        if (root.matches?.(selector)) protectFn(root);
+        root.querySelectorAll?.(selector).forEach(protectFn);
+    } catch (e) {
+        console.error('BCP Error: Invalid selector.', selector, e);
+    }
+};
+
 // --- Event Handlers ---
 const preventDefault = e => e.preventDefault();
 
@@ -167,8 +207,11 @@ const handleScreenRecording = () => {
 
 // --- Initialization ---
 const initProtection = () => {
-    document.querySelectorAll('video').forEach(protectVideo);
-    if (bcp_settings.disable_text_selection) {
+    if (ct.videos) document.querySelectorAll('video').forEach(protectVideo);
+    if (ct.code) document.querySelectorAll(CODE_SELECTOR).forEach(protectCodeBlock);
+    if (ct.banners) scanAndProtect(document.documentElement, bcp_settings.banner_selector, protectBanner);
+
+    if (bcp_settings.disable_text_selection && ct.text) {
         document.body.style.cssText += 'user-select:none;-webkit-user-select:none;';
     }
     if (bcp_settings.enhanced_protection) {
@@ -179,10 +222,10 @@ const initProtection = () => {
 const observer = new MutationObserver(mutations => {
     mutations.forEach(mutation => {
         mutation.addedNodes.forEach(node => {
-            if (node.nodeType === 1) {
-                if (node.tagName === 'VIDEO') protectVideo(node);
-                else node.querySelectorAll?.('video').forEach(protectVideo);
-            }
+            if (node.nodeType !== 1) return;
+            if (ct.videos) scanAndProtect(node, 'video', protectVideo);
+            if (ct.code) scanAndProtect(node, CODE_SELECTOR, protectCodeBlock);
+            if (ct.banners) scanAndProtect(node, bcp_settings.banner_selector, protectBanner);
         });
     });
 });
@@ -201,7 +244,7 @@ const BCP_Init = () => {
     ['fullscreenchange', 'webkitfullscreenchange'].forEach(e => document.addEventListener(e, handleFullscreenChange, false));
     if (bcp_settings.disable_right_click) document.addEventListener('contextmenu', preventDefault, false);
     if (bcp_settings.disable_copy) document.addEventListener('copy', preventDefault, false);
-    if (bcp_settings.disable_image_drag) document.addEventListener('dragstart', e => { if (e.target.tagName === 'IMG') e.preventDefault(); }, false);
+    if (bcp_settings.disable_image_drag && ct.images) document.addEventListener('dragstart', e => { if (e.target.tagName === 'IMG') e.preventDefault(); }, false);
 
     if (bcp_settings.disable_devtools || bcp_settings.disable_screenshot) {
         document.addEventListener('keydown', handleKeydown);
@@ -211,7 +254,7 @@ const BCP_Init = () => {
         window.addEventListener('focus', () => document.body.classList.remove('bcp-screenshot-detected'));
     }
 
-    handleScreenRecording();
+    if (ct.videos) handleScreenRecording();
 };
 
 // Run the initialization

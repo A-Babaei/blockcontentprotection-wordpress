@@ -3,6 +3,20 @@
     -webkit-filter: brightness(101%); /* Trick some screen capture software */
 }
 
+/* --- Content-Type Protection Helpers (code blocks, banners/logos) --- */
+.bcp-protect-noselect {
+    user-select: none !important;
+    -webkit-user-select: none !important;
+    -moz-user-select: none !important;
+    -ms-user-select: none !important;
+    -webkit-touch-callout: none !important;
+}
+
+.bcp-protect-nodrag {
+    -webkit-user-drag: none;
+    user-drag: none;
+}
+
 /* --- Watermark Styles --- */
 .bcp-watermark-wrapper {
     position: relative;

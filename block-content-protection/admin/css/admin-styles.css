@@ -158,3 +158,92 @@ input:checked + .bcp-switch {
 input:checked + .bcp-switch::before {
     transform: translateX(21px);
 }
+
+/* --- Post/Page Selector ("chips") --- */
+.bcp-post-selector {
+    position: relative;
+    max-width: 480px;
+}
+
+.bcp-post-selector-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-bottom: 8px;
+}
+
+.bcp-post-selector-chips:empty {
+    margin-bottom: 0;
+}
+
+.bcp-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    background: #f0f0f1;
+    border: 1px solid #dcdcde;
+    border-radius: 4px;
+    padding: 3px 8px;
+    font-size: 12px;
+    line-height: 1.6;
+}
+
+.bcp-chip-remove {
+    color: #a00;
+    text-decoration: none;
+    font-weight: 700;
+    margin-left: 2px;
+}
+
+.bcp-chip-remove:hover {
+    color: #dc3232;
+}
+
+.bcp-post-selector-results {
+    display: none;
+    position: absolute;
+    z-index: 10;
+    left: 0;
+    right: 0;
+    max-height: 240px;
+    overflow-y: auto;
+    background: #fff;
+    border: 1px solid #dcdcde;
+    box-shadow: 0 2px 6px rgba(0,0,0,.1);
+}
+
+.bcp-post-selector-results.is-open {
+    display: block;
+}
+
+.bcp-post-selector-result {
+    padding: 6px 10px;
+    font-size: 13px;
+    cursor: pointer;
+}
+
+.bcp-post-selector-result:hover,
+.bcp-post-selector-result.is-active {
+    background: #f0f6fc;
+}
+
+/* --- Content Protection Meta Box (post/page editor) --- */
+#bcp_meta_box .bcp-meta-row {
+    margin-top: 0;
+}
+
+#bcp_meta_box .bcp-meta-radio {
+    display: block;
+    margin-bottom: 6px;
+}
+
+#bcp_meta_box .bcp-meta-content-types {
+    margin-top: 10px;
+    padding-top: 10px;
+    border-top: 1px solid #dcdcde;
+}
+
+#bcp_meta_box .bcp-meta-checkbox {
+    display: block;
+    margin-bottom: 4px;
+}

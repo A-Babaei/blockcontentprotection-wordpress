@@ -6,12 +6,13 @@ A comprehensive content protection plugin for WordPress, designed to prevent con
 
 ---
 
-## 🆕 New in Version 1.6.4
+## 🆕 New in Version 2.0.0
 
-- **Improved Screenshot Blocking**: Enhanced protection against OS-level tools like the Windows Snipping Tool.
-- **Critical Bug Fix**: Resolved an issue where settings could not be disabled once enabled.
-- **Code Modernization**: The frontend script has been converted to a modern JavaScript module.
-- **Feature Removal**: The full-page watermark feature has been removed to simplify the plugin.
+- **Content Type Protection**: Choose exactly which kinds of content are protected — Images, Text, Videos, Code Blocks, and Banners/Logos — instead of an all-or-nothing policy.
+- **Per-Page Protection Control**: Force protection on or off for an individual post/page, and pick which content types apply there, right from the post editor.
+- **Page Selection Modes**: Protect everything except an exclusion list, or protect only a hand-picked list of posts/pages — chosen via a live search-and-select field.
+- **Security Hardening**: Stricter sanitization, capability checks, and nonces across the settings page, the new meta box, and the new AJAX search endpoint.
+- **Clean Uninstall**: Removes its options and post meta when deleted, including on multisite.
 
 ---
 
@@ -34,9 +35,20 @@ This plugin provides a robust set of features to protect your website's content:
 -   **Enhanced Screen Protection**: Adds protective CSS layers and detection mechanisms.
 -   **Video Watermark**: Apply a dynamic, animated watermark over your videos.
 
+### Content Type Protection
+-   **Images**: Protect images specifically (drag and right-click prevention).
+-   **Text**: Protect selectable text content.
+-   **Videos**: Gates the video protection pipeline (download blocking, watermark, recording detection).
+-   **Code Blocks**: Prevents selecting, copying, and right-clicking `<pre>`/`<code>` blocks.
+-   **Banners / Logos**: Prevents dragging, selecting, and right-clicking elements matched by a custom CSS selector.
+
+### Page Targeting
+-   **Global Modes**: Protect all posts/pages except an exclusion list, or protect only a selected list.
+-   **Per-Page Override**: Force-enable or force-disable protection on any individual post or page, and customize which content types apply there, from a "Content Protection" box in the editor sidebar.
+-   **Searchable Picker**: Find and add posts/pages to your exclusion/inclusion list by typing their title, no need to look up IDs.
+
 ### Customization
 -   **IP Whitelist**: Exclude specific IP addresses from all protections.
--   **Page Exclusions**: Exclude specific posts or pages by ID.
 -   **Custom Alert Messages**: Customize messages shown to users when they attempt restricted actions.
 
 ---
@@ -116,10 +128,14 @@ For maximum protection, enable:
 ```
 block-content-protection/
 ├── block-content-protection.php  (Main plugin file)
+├── uninstall.php                 (Cleanup on plugin deletion)
+├── admin/
+│   ├── css/admin-styles.css      (Settings & meta box styles)
+│   └── js/admin-scripts.js       (Settings & meta box behavior)
 ├── css/
-│   └── protect.css              (Protection styles)
+│   └── protect.css              (Front-end protection styles)
 ├── js/
-│   └── protect.js               (Protection scripts)
+│   └── protect.module.js        (Front-end protection script)
 └── languages/
     └── block-content-protection.pot
 ```
@@ -158,8 +174,8 @@ block-content-protection/
 
 For support, bug reports, or feature requests:
 - Visit: [adschi.com](https://adschi.com)
-- Version: 1.6.4
-- Last Updated: 2025
+- Version: 2.0.0
+- Last Updated: 2026
 
 ---
 
@@ -180,12 +196,13 @@ Copyright (c) 2025 Mohammad Babaei
 
 ---
 
-## 🆕 جدید در نسخه ۱.۶.۴
+## 🆕 جدید در نسخه ۲.۰.۰
 
-- **بهبود مسدودسازی اسکرین‌شات**: محافظت پیشرفته در برابر ابزارهای سیستمی مانند Snipping Tool ویندوز.
-- **رفع باگ حیاتی**: حل مشکلی که در آن تنظیمات پس از فعال‌سازی، غیرفعال نمی‌شدند.
-- **مدرن‌سازی کد**: اسکریپت فرانت‌اند به یک ماژول جاوااسکریپت مدرن تبدیل شده است.
-- **حذف ویژگی**: قابلیت واترمارک تمام صفحه برای ساده‌سازی افزونه حذف شده است.
+- **محافظت بر اساس نوع محتوا**: انتخاب دقیق نوع محتوایی که محافظت می‌شود — تصاویر، متن، ویدئو، بلوک‌های کد و بنر/لوگو.
+- **کنترل محافظت برای هر صفحه**: فعال یا غیرفعال کردن محافظت برای هر پست/صفحه به‌طور جداگانه از داخل ویرایشگر.
+- **حالت‌های انتخاب صفحه**: محافظت از همه صفحات به‌جز فهرست استثنا، یا فقط از صفحات انتخاب‌شده.
+- **تقویت امنیتی**: پاک‌سازی و اعتبارسنجی دقیق‌تر ورودی‌ها، بررسی سطح دسترسی و nonce در تمام بخش‌های جدید.
+- **حذف تمیز**: هنگام حذف افزونه، تمام تنظیمات و متادیتای مرتبط پاک می‌شود.
 
 ---
 
@@ -208,9 +225,15 @@ Copyright (c) 2025 Mohammad Babaei
 -   **محافظت پیشرفته صفحه**: افزودن لایه‌های محافظ CSS و مکانیزم‌های تشخیص
 -   **واترمارک ویدئو**: اعمال یک واترمارک متحرک و داینامیک بر روی ویدئوهای شما.
 
+### محافظت بر اساس نوع محتوا
+-   **تصاویر، متن، ویدئو، بلوک‌های کد و بنر/لوگو**: هرکدام را جداگانه فعال یا غیرفعال کنید.
+
+### هدف‌گذاری صفحات
+-   **حالت‌های سراسری**: محافظت از همه صفحات به‌جز فهرست استثنا، یا فقط صفحات انتخاب‌شده.
+-   **بازنویسی برای هر صفحه**: از جعبه «محافظت از محتوا» در ویرایشگر هر پست/صفحه، محافظت را فعال، غیرفعال یا سفارشی کنید.
+
 ### سفارشی‌سازی
 -   **لیست سفید IP**: حذف آدرس‌های IP خاص از تمام محافظت‌ها
--   **حذف صفحات**: حذف پست‌ها یا صفحات خاص با شناسه
 -   **پیام‌های سفارشی**: شخصی‌سازی پیام‌های نمایش داده شده به کاربران
 
 ---
@@ -289,8 +312,8 @@ Copyright (c) 2025 Mohammad Babaei
 
 برای پشتیبانی، گزارش باگ یا درخواست ویژگی:
 - وب‌سایت: [adschi.com](https://adschi.com)
-- نسخه: 1.6.4
-- آخرین به‌روزرسانی: ۲۰۲۵
+- نسخه: 2.0.0
+- آخرین به‌روزرسانی: ۲۰۲۶
 
 ---
 

@@ -2,6 +2,26 @@
 
 All notable changes to Block Content Protection will be documented in this file.
 
+## [2.0.0] - 2026-08-08
+
+### Added
+- **Content Type Protection**: New settings section to choose exactly what kind of content is protected — Images, Text, Videos, Code Blocks, and Banners/Logos (via a configurable CSS selector) — instead of an all-or-nothing page-wide policy.
+- **Dedicated Code Block Protection**: Selecting, copying, and right-clicking `<pre>`/`<code>` blocks (and common syntax-highlighter markup) can now be blocked independently of the rest of the page.
+- **Dedicated Banner/Logo Protection**: Drag, right-click, and selection can be blocked on any elements matching a custom CSS selector (e.g. your logo or promotional banners).
+- **Per-Page Protection Override**: A new "Content Protection" box in the post/page editor lets you force protection on or off for an individual post/page, and choose which content types apply there, overriding the global defaults.
+- **Page Selection Modes**: Choose whether protection applies to all posts/pages (with an exclusion list) or only to a specific, selected list of posts/pages.
+- **Searchable Post/Page Picker**: Excluded/included posts and pages are now chosen via a live AJAX search-and-select field instead of typing raw IDs.
+- **Uninstall Cleanup**: Plugin options and post meta are now removed cleanly when the plugin is deleted (`uninstall.php`), including multisite support.
+
+### Changed
+- **Security Hardening**: Tightened sanitization across all settings (allow-listed select values, validated IPs, allow-listed CSS selector characters, capability and nonce checks on the new meta box and AJAX endpoint).
+- **Consistent Versioning**: All enqueued scripts/styles now use a single plugin version constant for correct cache-busting on update.
+- **Non-Destructive Upgrades**: New settings are safely merged into existing installs on upgrade, and the legacy comma-separated "Excluded Pages" format is automatically migrated to the new page picker.
+- Reorganized the settings screen into clearer sections (Protection, Content Type Protection, Watermark, Page Selection, IP Exclusions, Messages).
+
+### Removed
+- Removed the legacy, unused `js/protect.js` script — the plugin has run on the ES module (`js/protect.module.js`) since 1.6.4.
+
 ## [1.6.6] - 2025-10-27
 
 ### Fixed
