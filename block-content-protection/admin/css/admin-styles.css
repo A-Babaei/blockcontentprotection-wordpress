@@ -103,6 +103,12 @@
     color: #777;
 }
 
+.bcp-footer p.bcp-footer-credit {
+    margin-top: 4px;
+    font-size: 12px;
+    color: #999;
+}
+
 /* Specific field styling */
 .bcp-card-body .regular-text,
 .bcp-card-body .large-text {

@@ -6,12 +6,16 @@
  * Version:           2.0.0
  * Requires at least: 5.0
  * Requires PHP:      7.4
- * Author:            Mohammad Babaei
+ * Author:            Mohammad Babaei (Adschi) & A. Babaei
  * Author URI:        https://adschi.com/
  * License:           GPL-2.0+
  * License URI:       http://www.gnu.org/licenses/gpl-2.0.txt
  * Text Domain:       block-content-protection
  * Domain Path:       /languages
+ *
+ * Credits:
+ * - Base app developed by: Mohammad Babaei - Adschi (https://adschi.com/)
+ * - Extension & development by: A. Babaei
  */
 
 if ( ! defined( 'WPINC' ) ) {
@@ -449,13 +453,18 @@ function bcp_options_page() {
                     ],
                 ];
                 $footer_text = sprintf(
-                    /* translators: 1: Plugin Name, 2: Plugin Version, 3: Author Link. */
-                    __( 'Thank you for using %1$s! Version %2$s by %3$s.', 'block-content-protection' ),
+                    /* translators: 1: Plugin Name, 2: Plugin Version, 3: Base developer link. */
+                    __( 'Thank you for using %1$s! Version %2$s. Base app developed by %3$s.', 'block-content-protection' ),
                     esc_html( $plugin_data['Name'] ),
                     esc_html( $plugin_data['Version'] ),
-                    '<a href="' . esc_url( $plugin_data['AuthorURI'] ) . '" target="_blank">' . esc_html( $plugin_data['Author'] ) . '</a>'
+                    '<a href="' . esc_url( $plugin_data['AuthorURI'] ) . '" target="_blank">' . esc_html__( 'Mohammad Babaei - Adschi', 'block-content-protection' ) . '</a>'
                 );
                 echo wp_kses( $footer_text, $allowed_html );
+                ?>
+            </p>
+            <p class="bcp-footer-credit">
+                <?php
+                echo esc_html__( 'Extension & development by A. Babaei.', 'block-content-protection' );
                 ?>
             </p>
         </div>
